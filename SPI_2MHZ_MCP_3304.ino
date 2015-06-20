@@ -1,8 +1,8 @@
 // Read the MCP3304 ADC in single ended mode (12 bit precision)
-// Averages each of the 8 chanels over a few hundred samples, print results
+// Averages each of the 8 channels over a few hundred samples, print results
 // 32,000 samples/second with very little time to spare
 // Extension of http://playground.arduino.cc/Code/MCP3208 for Leonardo and MCP3304 in single ended mode.
-// Actually does something semi-useful (Reads, averages and prints all chanels) unlike Arduino examples
+// Actually does something semi-useful (Reads, averages and prints all channels) unlike Arduino examples
 
 //Wiring
 //Leonardo -> MCP3304
@@ -28,10 +28,10 @@
 #define SELPIN 7                //chip-select for ADC SPI Communication
 #define LEDPIN 13              //ON when processing/reading ADC
 unsigned long cycleTime = 200;//milliseconds to spend in each iteration of loop()
-long reading[8];             //stores the 8 readings from the 8 ADC chanels
-int samples = 800;          //number of samples to take from each chanel in each iteration of loop()
+long reading[8];             //stores the 8 readings from the 8 ADC channels
+int samples = 800;          //number of samples to take from each channel in each iteration of loop()
 long count = 0;
-//Samples per second = (1000 / cycleTime) * num chanels * samples
+//Samples per second = (1000 / cycleTime) * num channels * samples
 //This sketch performance:
 //Max at 2MHZ:  800 samples, 32000/second
 //Max at 1MHZ:  550 samples, 22000/second
@@ -69,7 +69,7 @@ void loop() {
     reading[i] = 0;
   }
   
-  //Read and accumulate the specified number of samples from each of the 8 chanels
+  //Read and accumulate the specified number of samples from each of the 8 channels
   digitalWrite(LEDPIN, HIGH);
   for (int s = 0; s < samples; s++)
   {
@@ -82,21 +82,23 @@ void loop() {
   
   count++;
   Serial.println(count);
-  //Print out average and raw value of each chanel
+  //Print out average and raw value of each channel
   for (byte i = 0; i < 8; i++)
   {
     long avg = reading[i] / samples;
     Serial.print(i);
     Serial.print(": ");
-    Serial.println(avg);         //averaged total for this chanel
-    Serial.println(reading[i]); //raw accumulated total of this chanel
+    Serial.println(avg);         //averaged total for this channel
+    Serial.println(reading[i]); //raw accumulated total of this channel
   }
 
   //How much of our cycle time is left to sleep?
-  //Be sure to check for negative numbers if this loop took longer than the time limit
   unsigned long endTime = startTime + cycleTime;
   unsigned long theTime = millis();
-  Serial.print("S: ");
+  Serial.print("Busy: ");
+  Serial.println(theTime - startTime);
+  Serial.print("Sleep: ");
+  //Be sure to check for negative numbers if this loop took longer than the time limit
   if (theTime > endTime)
   {
     Serial.print('-');
@@ -111,7 +113,7 @@ void loop() {
 }
 
 //From http://playground.arduino.cc/Code/MCP3208 
-//0 - 7 to select ADC chanel to read in single ended mode
+//0 - 7 to select ADC channel to read in single ended mode
 int read_adc(int channel){
   int adcvalue = 0;
   int b1 = 0, b2 = 0;
@@ -122,7 +124,7 @@ int read_adc(int channel){
   //30000000
   //S: Start bit of 1 begins data transfer
   //M: 1 = Single ended mode, 0 = differential mode
-  //1,2,3: Chanel bits (D2, D1, D0 in datasheet)
+  //1,2,3: channelz bits (D2, D1, D0 in datasheet)
   //Everything after this: Wait for ADC to process sample
 
   digitalWrite (SELPIN, LOW); // Select adc
